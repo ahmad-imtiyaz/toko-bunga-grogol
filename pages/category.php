@@ -2,9 +2,9 @@
 // $category sudah di-set oleh router
 require_once __DIR__ . '/../includes/config.php';
 
-$meta_title    = $category['meta_title']    ?: 'Toko Bunga Jakarta Utara - ' . $category['name'];
+$meta_title    = $category['meta_title']    ?: 'Toko Bunga Grogol - ' . $category['name'];
 $meta_desc     = $category['meta_description'] ?: '';
-$meta_keywords = $category['name'] . ', toko bunga jakarta utara, florist jakarta utara';
+$meta_keywords = $category['name'] . ', toko bunga Grogol, florist Grogol';
 
 // Products in this category
 $stmt = db()->prepare("SELECT * FROM products WHERE category_id = ? AND status='active' ORDER BY id");
@@ -49,12 +49,12 @@ require __DIR__ . '/../includes/header.php';
     <div class="max-w-2xl">
       <h1 class="font-serif text-3xl md:text-5xl font-bold mb-4
                  <?= !empty($category['image']) ? 'text-white' : 'text-navy' ?>">
-        <?= e($category['name']) ?> Jakarta Utara
+        <?= e($category['name']) ?> Grogol
       </h1>
       <p class="text-lg mb-6 <?= !empty($category['image']) ? 'text-white/85' : 'text-gray-600' ?>">
-        Toko bunga Jakarta Utara menyediakan <?= e(strtolower($category['name'])) ?> berkualitas tinggi dengan bunga segar pilihan. Pesan sekarang, kirim cepat ke seluruh Jakarta Utara.
+        Toko bunga Grogol menyediakan <?= e(strtolower($category['name'])) ?> berkualitas tinggi dengan bunga segar pilihan. Pesan sekarang, kirim cepat ke seluruh Grogol.
       </p>
-      <a href="<?= e($wa_url) ?>?text=<?= urlencode('Halo, saya ingin memesan ' . $category['name'] . ' di Jakarta Utara.') ?>" target="_blank"
+      <a href="<?= e($wa_url) ?>?text=<?= urlencode('Halo, saya ingin memesan ' . $category['name'] . ' di Grogol.') ?>" target="_blank"
          class="inline-flex items-center gap-2 bg-sage hover:bg-sage-dark text-white font-bold px-7 py-3.5 rounded-full transition shadow">
         💬 Pesan via WhatsApp
       </a>
@@ -78,7 +78,7 @@ require __DIR__ . '/../includes/header.php';
           <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition border border-gray-100 group">
             <div class="aspect-[4/3] overflow-hidden bg-cream">
               <img src="<?= e(imgUrl($prod['image'], 'product')) ?>"
-                   alt="<?= e($prod['name']) ?> Jakarta Utara"
+                   alt="<?= e($prod['name']) ?> Grogol"
                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
             </div>
             <div class="p-4">
@@ -99,19 +99,19 @@ require __DIR__ . '/../includes/header.php';
 
         <!-- Long content for SEO -->
         <div class="prose max-w-none text-gray-600">
-          <h2 class="font-serif text-2xl font-bold text-navy mb-4"><?= e($category['name']) ?> Terbaik di Jakarta Utara</h2>
+          <h2 class="font-serif text-2xl font-bold text-navy mb-4"><?= e($category['name']) ?> Terbaik di Grogol</h2>
           <?= $category['content'] ?>
-          <p>Kami sebagai <strong>florist Jakarta Utara</strong> terpercaya menyediakan <?= e(strtolower($category['name'])) ?> berkualitas tinggi dengan harga terjangkau. Setiap rangkaian bunga dibuat oleh tim florist profesional kami menggunakan bunga segar yang dipilih setiap hari.</p>
-          <h3 class="font-serif text-xl font-bold text-navy mt-6 mb-3">Mengapa Memilih Kami untuk <?= e($category['name']) ?> di Jakarta Utara?</h3>
+          <p>Kami sebagai <strong>florist Grogol</strong> terpercaya menyediakan <?= e(strtolower($category['name'])) ?> berkualitas tinggi dengan harga terjangkau. Setiap rangkaian bunga dibuat oleh tim florist profesional kami menggunakan bunga segar yang dipilih setiap hari.</p>
+          <h3 class="font-serif text-xl font-bold text-navy mt-6 mb-3">Mengapa Memilih Kami untuk <?= e($category['name']) ?> di Grogol?</h3>
           <ul class="space-y-2">
             <li>✅ Bunga 100% segar berkualitas premium</li>
-            <li>✅ Pengiriman cepat 2-4 jam ke seluruh Jakarta Utara</li>
+            <li>✅ Pengiriman cepat 2-4 jam ke seluruh Grogol</li>
             <li>✅ Harga transparan mulai Rp 300.000</li>
             <li>✅ Desain custom sesuai keinginan Anda</li>
             <li>✅ Melayani pesanan mendadak 24 jam</li>
           </ul>
           <h3 class="font-serif text-xl font-bold text-navy mt-6 mb-3">Area Pengiriman <?= e($category['name']) ?></h3>
-          <p>Kami melayani pengiriman <?= e(strtolower($category['name'])) ?> ke seluruh kecamatan di Jakarta Utara, termasuk:
+          <p>Kami melayani pengiriman <?= e(strtolower($category['name'])) ?> ke seluruh kecamatan di Grogol, termasuk:
             <a href="<?= BASE_URL ?>/toko-bunga-penjaringan/" class="text-sage hover:underline">Penjaringan</a>,
             <a href="<?= BASE_URL ?>/toko-bunga-pademangan/" class="text-sage hover:underline">Pademangan</a>,
             <a href="<?= BASE_URL ?>/toko-bunga-tanjung-priok/" class="text-sage hover:underline">Tanjung Priok</a>,
@@ -127,7 +127,7 @@ require __DIR__ . '/../includes/header.php';
         <div class="mt-10 bg-cream rounded-2xl p-6 text-center border border-sage/20">
           <p class="font-serif text-xl font-semibold text-navy mb-2">Siap memesan <?= e($category['name']) ?>?</p>
           <p class="text-gray-500 text-sm mb-5">Hubungi kami sekarang dan dapatkan penawaran terbaik!</p>
-          <a href="<?= e($wa_url) ?>?text=<?= urlencode('Halo, saya ingin memesan ' . $category['name'] . ' di Jakarta Utara. Mohon info harga dan ketersediaannya.') ?>" target="_blank"
+          <a href="<?= e($wa_url) ?>?text=<?= urlencode('Halo, saya ingin memesan ' . $category['name'] . ' di Grogol. Mohon info harga dan ketersediaannya.') ?>" target="_blank"
              class="inline-flex items-center gap-2 bg-sage hover:bg-sage-dark text-white font-bold px-8 py-3.5 rounded-full transition shadow">
             💬 Hubungi via WhatsApp Sekarang
           </a>

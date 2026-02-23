@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/config.php';
-$meta_title = 'Halaman Tidak Ditemukan — Toko Bunga Jakarta Utara';
+$meta_title = 'Halaman Tidak Ditemukan — Toko Bunga Grogol';
 $meta_desc  = 'Halaman yang Anda cari tidak ditemukan.';
 require __DIR__ . '/../includes/header.php';
 ?>

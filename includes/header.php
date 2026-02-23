@@ -176,7 +176,7 @@ tailwind.config = {
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "<?= e(setting('address')) ?>",
-    "addressLocality": "Jakarta Utara",
+    "addressLocality": "Grogol",
     "addressRegion": "DKI Jakarta",
     "addressCountry": "ID"
   },

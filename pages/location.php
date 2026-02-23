@@ -2,9 +2,9 @@
 // $location sudah di-set oleh router
 require_once __DIR__ . '/../includes/config.php';
 
-$meta_title    = $location['meta_title']       ?: 'Toko Bunga ' . $location['name'] . ' Jakarta Utara';
+$meta_title    = $location['meta_title']       ?: 'Toko Bunga ' . $location['name'] . ' Grogol';
 $meta_desc     = $location['meta_description'] ?: '';
-$meta_keywords = 'toko bunga ' . strtolower($location['name']) . ', florist ' . strtolower($location['name']) . ', bunga jakarta utara';
+$meta_keywords = 'toko bunga ' . strtolower($location['name']) . ', florist ' . strtolower($location['name']) . ', bunga Grogol';
 
 $categories = db()->query("SELECT * FROM categories WHERE status='active' ORDER BY id")->fetchAll();
 $products   = db()->query("SELECT p.*, c.name as cat_name FROM products p LEFT JOIN categories c ON p.category_id=c.id WHERE p.status='active' ORDER BY RAND() LIMIT 6")->fetchAll();
@@ -34,16 +34,16 @@ require __DIR__ . '/../includes/header.php';
   <div class="max-w-7xl mx-auto px-4">
     <div class="max-w-2xl">
       <div class="inline-flex items-center gap-2 bg-sage/10 border border-sage/30 rounded-full px-4 py-1.5 text-sage text-sm font-medium mb-5">
-        📍 <?= e($location['name']) ?>, Jakarta Utara
+        📍 <?= e($location['name']) ?>, Grogol
       </div>
       <h1 class="font-serif text-3xl md:text-5xl font-bold text-navy mb-4">
-        Toko Bunga <?= e($location['name']) ?> Jakarta Utara
+        Toko Bunga <?= e($location['name']) ?> Grogol
       </h1>
       <p class="text-gray-600 text-lg mb-6">
         Florist <?= e($location['name']) ?> terpercaya melayani karangan bunga papan, hand bouquet, bunga duka cita, wedding, dan semua kebutuhan bunga Anda. Pengiriman cepat 2-4 jam ke seluruh <?= e($location['name']) ?>.
       </p>
       <div class="flex flex-col sm:flex-row gap-3">
-        <a href="<?= e($wa_url) ?>?text=<?= urlencode('Halo, saya ingin memesan bunga di ' . $location['name'] . ', Jakarta Utara.') ?>" target="_blank"
+        <a href="<?= e($wa_url) ?>?text=<?= urlencode('Halo, saya ingin memesan bunga di ' . $location['name'] . ', Grogol.') ?>" target="_blank"
            class="inline-flex items-center justify-center gap-2 bg-sage hover:bg-sage-dark text-white font-bold px-7 py-3.5 rounded-full transition shadow">
           💬 Pesan via WhatsApp
         </a>
@@ -142,7 +142,7 @@ require __DIR__ . '/../includes/header.php';
           <p>Sebagai <strong>toko bunga <?= e(strtolower($location['name'])) ?></strong> yang telah melayani pelanggan selama lebih dari 10 tahun, kami memahami bahwa setiap momen memerlukan rangkaian bunga yang tepat. Tim florist profesional kami siap membantu Anda memilih dan merancang bunga terbaik untuk setiap kebutuhan.</p>
 
           <h3 class="font-serif text-xl font-bold text-navy mt-8 mb-3">Layanan Florist <?= e($location['name']) ?></h3>
-          <p>Kami menyediakan berbagai layanan bunga di <?= e($location['name']) ?>, Jakarta Utara:</p>
+          <p>Kami menyediakan berbagai layanan bunga di <?= e($location['name']) ?>, Grogol:</p>
           <ul class="space-y-2">
             <?php foreach ($categories as $cat): ?>
             <li>✅ <a href="<?= BASE_URL ?>/<?= e($cat['slug']) ?>/" class="text-sage hover:underline"><?= e($cat['name']) ?></a> di <?= e($location['name']) ?></li>
@@ -160,7 +160,7 @@ require __DIR__ . '/../includes/header.php';
           </ul>
 
           <h3 class="font-serif text-xl font-bold text-navy mt-8 mb-3">Area Lain yang Kami Layani</h3>
-          <p>Selain <?= e($location['name']) ?>, kami juga melayani pengiriman ke kecamatan lain di Jakarta Utara:</p>
+          <p>Selain <?= e($location['name']) ?>, kami juga melayani pengiriman ke kecamatan lain di Grogol:</p>
           <ul class="space-y-1">
             <?php foreach ($locations as $l): ?>
             <?php if ($l['id'] != $location['id']): ?>
@@ -196,8 +196,8 @@ require __DIR__ . '/../includes/header.php';
         <!-- CTA -->
         <div class="bg-sage rounded-2xl p-8 text-white text-center">
           <h3 class="font-serif text-2xl font-bold mb-2">Pesan Bunga di <?= e($location['name']) ?> Sekarang!</h3>
-          <p class="text-white/80 mb-6">Pengiriman cepat 2-4 jam ke <?= e($location['name']) ?> dan seluruh Jakarta Utara.</p>
-          <a href="<?= e($wa_url) ?>?text=<?= urlencode('Halo, saya ingin memesan bunga untuk dikirim ke ' . $location['name'] . ', Jakarta Utara.') ?>" target="_blank"
+          <p class="text-white/80 mb-6">Pengiriman cepat 2-4 jam ke <?= e($location['name']) ?> dan seluruh Grogol.</p>
+          <a href="<?= e($wa_url) ?>?text=<?= urlencode('Halo, saya ingin memesan bunga untuk dikirim ke ' . $location['name'] . ', Grogol.') ?>" target="_blank"
              class="inline-flex items-center gap-2 bg-white text-sage font-bold px-8 py-3.5 rounded-full transition hover:bg-cream shadow">
             💬 Chat WhatsApp Sekarang
           </a>
