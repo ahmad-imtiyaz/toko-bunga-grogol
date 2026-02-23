@@ -10,7 +10,7 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: 'DM Sans', sans-serif;
-  background-color: #FDF8F0;
+  /* ⚠️ DIHAPUS: background cream lama diganti navy di masing-masing file section */
   color: #374151;
 }
 
@@ -19,19 +19,17 @@ h1, h2, h3, .font-serif {
   font-family: 'Playfair Display', Georgia, serif;
 }
 
-/* Scroll offset untuk anchor */
+/* Scroll offset untuk anchor — dinaikkan karena navbar pill lebih tinggi */
 section[id] {
-  scroll-margin-top: 80px;
+  scroll-margin-top: 100px;
 }
 
 /* Line clamp */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-
   -webkit-line-clamp: 2;
   line-clamp: 2;
-
   overflow: hidden;
 }
 
@@ -57,10 +55,9 @@ section[id] {
   box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
-/* Sticky nav shadow on scroll */
-#navbar.scrolled {
-  box-shadow: 0 2px 20px rgba(44,62,107,0.1);
-}
+/* ⚠️ DIHAPUS — ini yang bikin navbar pill tidak jalan:
+   #navbar.scrolled { box-shadow: ... }
+   Sekarang dihandle sepenuhnya oleh CSS di header-navbar-pill.php */
 
 /* Hero image overlay */
 .hero-overlay {
@@ -125,38 +122,31 @@ section[id] {
   color: #374151;
   margin-bottom: 0.375rem;
 }
-/* Wrapper hover effect */
+
+/* Logo hover effect */
 .logo-wrapper {
   transition: transform 0.4s ease, box-shadow 0.4s ease;
   position: relative;
 }
 
-/* Zoom seluruh brand */
 .brand {
   transition: transform 0.35s ease;
 }
-
 .brand:hover {
   transform: scale(1.08);
 }
 
-/* Glow logo */
-.logo-wrapper {
-  transition: box-shadow 0.35s ease;
-}
-
 .brand:hover .logo-wrapper {
   box-shadow:
-    0 0 15px rgba(132, 204, 170, 0.7),
-    0 0 30px rgba(132, 204, 170, 0.4);
+    0 0 15px rgba(245,197,24,0.5),
+    0 0 30px rgba(245,197,24,0.25);
 }
 
-/* Animasi icon subtle */
 .logo-img {
   animation: floatLogo 3s ease-in-out infinite;
 }
 
 @keyframes floatLogo {
   0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+  50%      { transform: translateY(-3px); }
 }
