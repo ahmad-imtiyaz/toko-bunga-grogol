@@ -46,7 +46,7 @@ tailwind.config = {
     </div>
     <div class="transition duration-300 group-hover:translate-x-0.5">
       <div class="font-serif font-semibold text-sm leading-tight">Admin Panel</div>
-      <div class="text-xs text-gray-400">Toko Bunga Jkt Utara</div>
+      <div class="text-xs text-gray-400">Toko Bunga Jkt Barat</div>
     </div>
   </div>
 </div>
