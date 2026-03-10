@@ -216,7 +216,7 @@ require __DIR__ . '/../includes/header.php';
       <div class="inline-flex items-center gap-2 bg-[#F5C518]/10 border border-[#F5C518]/25 rounded-full px-4 py-1.5 text-[11px] font-bold tracking-widest uppercase text-[#F5C518] mb-5">
         <span class="w-1.5 h-1.5 rounded-full bg-[#F5C518] inline-block"></span>Tersedia di <?= e($location['name']) ?>
       </div>
-      <h2 class="font-serif text-3xl md:text-4xl font-black text-white">Layanan Bunga di<br><span style="color:#F5C518;">Toko Bunga Grogol <?= e($location['name']) ?></span></h2>
+      <h2 class="font-serif text-3xl md:text-4xl font-black text-white">Layanan Bunga di<br><span style="color:#F5C518;"> <?= e($location['name']) ?></span></h2>
       <p class="text-white/40 mt-3 max-w-lg mx-auto text-[15px]">Semua kebutuhan bunga Anda tersedia dan siap dikirim ke <?= e($location['name']) ?></p>
     </div>
 
