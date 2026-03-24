@@ -117,6 +117,17 @@ require __DIR__ . '/../includes/header.php';
 .lm-dots { position:absolute; inset:0; opacity:.06; background-image:radial-gradient(circle,#F5C518 1px,transparent 1px); background-size:24px 24px; }
 .lm-num { font-family:'Playfair Display',Georgia,serif; font-size:64px; font-weight:900; color:rgba(245,197,24,.06); line-height:1; position:absolute; bottom:-10px; right:12px; pointer-events:none; transition:color .3s ease; user-select:none; }
 .lm-card:hover .lm-num { color:rgba(245,197,24,.1); }
+
+/* font content */
+.loc-content h1 { font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:#fff; margin-bottom:1rem; margin-top:1.5rem; line-height:1.2; }
+.loc-content h2 { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:800; color:#fff; margin-bottom:0.75rem; margin-top:1.25rem; line-height:1.3; }
+.loc-content h3 { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; color:rgba(255,255,255,0.85); margin-bottom:0.5rem; margin-top:1rem; }
+.loc-content p  { margin-bottom:0.75rem; }
+.loc-content ul { list-style:disc; padding-left:1.5rem; margin-bottom:0.75rem; }
+.loc-content ol { list-style:decimal; padding-left:1.5rem; margin-bottom:0.75rem; }
+.loc-content li { margin-bottom:0.25rem; color:rgba(255,255,255,0.5); }
+.loc-content strong { color:rgba(255,255,255,0.85); font-weight:700; }
+.loc-content a  { color:#F5C518; text-decoration:underline; }
 </style>
 
 <!-- ════════════════════════════════════════════════
@@ -356,7 +367,7 @@ require __DIR__ . '/../includes/header.php';
             Toko Bunga <?= e($location['name']) ?><br><span style="color:#F5C518;">Terpercaya & Berpengalaman</span>
           </h2>
           <?php if (!empty($location['content'])): ?>
-          <div class="text-white/50 leading-relaxed text-[15px] mb-5"><?= $location['content'] ?></div>
+          <div class="text-white/50 leading-relaxed text-[15px] mb-5 loc-content"><?= $location['content'] ?></div>
           <?php endif; ?>
           <p class="text-white/45 text-[15px] leading-relaxed mb-6">
             Sebagai <strong class="text-white/80">toko bunga <?= e(strtolower($location['name'])) ?></strong> yang telah melayani pelanggan lebih dari 10 tahun, kami memahami setiap momen memerlukan rangkaian bunga yang tepat. Tim florist profesional siap membantu 24 jam.
