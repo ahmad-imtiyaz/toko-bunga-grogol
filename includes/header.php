@@ -345,6 +345,11 @@ tailwind.config = {
         <a href="<?= BASE_URL ?>/#area"      class="nav-link">Area Kirim</a>
         <a href="<?= BASE_URL ?>/#testimoni" class="nav-link">Testimoni</a>
         <a href="<?= BASE_URL ?>/#faq"       class="nav-link">FAQ</a>
+          <!-- Blog -->
+        <a href="<?= BASE_URL ?>/blog/"
+           class="nav-link <?= $current_slug === 'blog' || str_starts_with($current_slug, 'blog/') ? 'active' : '' ?>">
+          Blog
+        </a>
       </div>
 
       <!-- CTA Desktop -->
@@ -421,6 +426,11 @@ tailwind.config = {
         <a href="<?= BASE_URL ?>/#area"      class="mob-link mob-close">📍 Area Kirim</a>
         <a href="<?= BASE_URL ?>/#testimoni" class="mob-link mob-close">⭐ Testimoni</a>
         <a href="<?= BASE_URL ?>/#faq"       class="mob-link mob-close">❓ FAQ</a>
+          <!-- Blog -->
+        <a href="<?= BASE_URL ?>/blog/"
+           class="mob-link mob-close <?= str_starts_with($current_slug, 'blog') ? 'text-[#F5C518]' : '' ?>">
+          📝 Blog
+        </a>
 
         <a href="<?= e($wa_url) ?>" target="_blank"
            class="mt-2 mx-1 flex items-center justify-center gap-2 font-bold text-[#0B1F4A] py-3 rounded-full transition hover:brightness-110"
