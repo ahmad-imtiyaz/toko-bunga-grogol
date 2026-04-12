@@ -19,6 +19,12 @@ foreach ($all_cats_raw as $ac) {
 $locations = db()->query("SELECT * FROM locations WHERE status='active' ORDER BY id")->fetchAll();
 $wa_url    = setting('whatsapp_url');
 
+// ── Slider kalkulasi ──
+$slider_per_page    = 10;
+$slider_total       = count($locations);
+$slider_pages       = (int)ceil($slider_total / $slider_per_page);
+$slider_active_page = 0;
+
 $product_count = count($products);
 $min_price     = !empty($products) ? min(array_column($products, 'price')) : 300000;
 
@@ -425,27 +431,66 @@ require __DIR__ . '/../includes/header.php';
       <!-- Kanan: Area pengiriman + Kategori lain -->
       <div class="space-y-6">
 
-        <!-- Area pengiriman -->
-        <div class="rounded-2xl p-6" style="background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);">
-          <div class="flex items-center gap-2 mb-5">
-            <span class="text-[#F5C518] text-lg">📍</span>
-            <h3 class="font-serif font-black text-white text-lg">Area Pengiriman</h3>
-          </div>
-          <p class="text-white/40 text-[13px] mb-4 leading-relaxed">
-            Kami melayani pengiriman <?= e(strtolower($category['name'])) ?> ke seluruh kecamatan di Grogol:
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <?php foreach ($locations as $l): ?>
-            <a href="<?= BASE_URL ?>/<?= e($l['slug']) ?>/"
-               class="area-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-semibold text-white/60 no-underline"
-               style="background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);">
-              <span class="w-1 h-1 rounded-full bg-[#F5C518]/50 flex-shrink-0 inline-block"></span>
-              <?= e($l['name']) ?>
-            </a>
-            <?php endforeach; ?>
-          </div>
-        </div>
+      <!-- Area pengiriman -->
+<div class="rounded-2xl p-6" style="background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);">
+  <div class="flex items-center gap-2 mb-5">
+    <span class="text-[#F5C518] text-lg">📍</span>
+    <h3 class="font-serif font-black text-white text-lg">Area Pengiriman</h3>
+  </div>
+  <p class="text-white/40 text-[13px] mb-4 leading-relaxed">
+    Kami melayani pengiriman <?= e(strtolower($category['name'])) ?> ke seluruh kecamatan di Grogol:
+  </p>
 
+  <!-- Halaman-halaman area -->
+  <?php for ($p = 0; $p < $slider_pages; $p++): ?>
+  <div id="catAreaPage<?= $p ?>"
+       style="display:<?= $p === $slider_active_page ? 'grid' : 'none' ?>;
+              grid-template-columns: repeat(2, 1fr);
+              gap: 6px;
+              min-height: 60px;">
+    <?php
+    $slice = array_slice($locations, $p * $slider_per_page, $slider_per_page);
+    foreach ($slice as $l):
+    ?>
+    <a href="<?= BASE_URL ?>/<?= e($l['slug']) ?>/"
+       class="area-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[12px] font-semibold text-white/60 no-underline overflow-hidden"
+       style="background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); min-width:0;">
+      <span style="width:4px;height:4px;border-radius:50%;background:rgba(245,197,24,.5);flex-shrink:0;display:inline-block;"></span>
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;"><?= e($l['name']) ?></span>
+    </a>
+    <?php endforeach; ?>
+  </div>
+  <?php endfor; ?>
+
+  <!-- Navigasi -->
+  <?php if ($slider_pages > 1): ?>
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,.06);">
+    <button id="catAreaPrev" onclick="catAreaSlider(-1)"
+            style="font-size:11px; padding:4px 12px; border-radius:8px;
+                   border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06);
+                   color:rgba(255,255,255,.45); cursor:pointer;">
+      ‹ Prev
+    </button>
+
+    <div style="display:flex; gap:4px; align-items:center;">
+      <?php for ($p = 0; $p < $slider_pages; $p++): ?>
+      <span id="catAreaDot<?= $p ?>" onclick="catAreaGoPage(<?= $p ?>)"
+            style="display:inline-block; height:5px; border-radius:3px; cursor:pointer; transition:all .2s;
+                   width:<?= $p === $slider_active_page ? '16px' : '5px' ?>;
+                   background:<?= $p === $slider_active_page ? '#F5C518' : 'rgba(255,255,255,.2)' ?>;"></span>
+      <?php endfor; ?>
+    </div>
+
+    <button id="catAreaNext" onclick="catAreaSlider(1)"
+            style="font-size:11px; padding:4px 12px; border-radius:8px;
+                   border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06);
+                   color:rgba(255,255,255,.45); cursor:pointer;">
+      Next ›
+    </button>
+  </div>
+  <p id="catAreaInfo" style="text-align:center; font-size:11px; color:rgba(255,255,255,.2); margin-top:5px;"></p>
+  <?php endif; ?>
+</div>
         <!-- Layanan lain -->
         <div class="rounded-2xl p-6" style="background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);">
           <h3 class="font-serif font-black text-white text-lg mb-5">Layanan Lainnya</h3>
@@ -549,5 +594,53 @@ require __DIR__ . '/../includes/header.php';
     </div>
   </div>
 </section>
+<script>
+(function() {
+  var perPage = <?= $slider_per_page ?>;
+  var total   = <?= $slider_total ?>;
+  var pages   = <?= $slider_pages ?>;
+  var cur     = <?= $slider_active_page ?>;
+
+  function update() {
+    for (var i = 0; i < pages; i++) {
+      var el = document.getElementById('catAreaPage' + i);
+      if (el) el.style.display = (i === cur) ? 'grid' : 'none';
+    }
+    for (var i = 0; i < pages; i++) {
+      var dot = document.getElementById('catAreaDot' + i);
+      if (!dot) continue;
+      dot.style.width      = (i === cur) ? '16px' : '5px';
+      dot.style.background = (i === cur) ? '#F5C518' : 'rgba(255,255,255,.2)';
+    }
+    var prev = document.getElementById('catAreaPrev');
+    var next = document.getElementById('catAreaNext');
+    if (prev) {
+      prev.disabled      = (cur === 0);
+      prev.style.opacity = (cur === 0) ? '0.3' : '1';
+      prev.style.cursor  = (cur === 0) ? 'not-allowed' : 'pointer';
+      prev.onmouseenter  = function() { if (!prev.disabled) { prev.style.background='rgba(245,197,24,.15)'; prev.style.borderColor='rgba(245,197,24,.3)'; prev.style.color='#F5C518'; }};
+      prev.onmouseleave  = function() { prev.style.background='rgba(255,255,255,.06)'; prev.style.borderColor='rgba(255,255,255,.12)'; prev.style.color='rgba(255,255,255,.45)'; };
+    }
+    if (next) {
+      next.disabled      = (cur === pages - 1);
+      next.style.opacity = (cur === pages - 1) ? '0.3' : '1';
+      next.style.cursor  = (cur === pages - 1) ? 'not-allowed' : 'pointer';
+      next.onmouseenter  = function() { if (!next.disabled) { next.style.background='rgba(245,197,24,.15)'; next.style.borderColor='rgba(245,197,24,.3)'; next.style.color='#F5C518'; }};
+      next.onmouseleave  = function() { next.style.background='rgba(255,255,255,.06)'; next.style.borderColor='rgba(255,255,255,.12)'; next.style.color='rgba(255,255,255,.45)'; };
+    }
+    var info = document.getElementById('catAreaInfo');
+    if (info) {
+      var start = cur * perPage + 1;
+      var end   = Math.min((cur + 1) * perPage, total);
+      info.textContent = start + '–' + end + ' dari ' + total + ' area';
+    }
+  }
+
+  window.catAreaSlider  = function(dir) { cur = Math.max(0, Math.min(pages - 1, cur + dir)); update(); };
+  window.catAreaGoPage  = function(p)   { cur = p; update(); };
+
+  update();
+})();
+</script>
 
 <?php require __DIR__ . '/../includes/footer.php'; ?>

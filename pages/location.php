@@ -380,23 +380,76 @@ require __DIR__ . '/../includes/header.php';
           </a>
         </div>
 
-        <!-- 📍 Area Lainnya -->
-        <div class="rounded-2xl p-5" style="background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);">
-          <div class="flex items-center gap-2 mb-4">
-            <span class="text-[#F5C518]">📍</span>
-            <h3 class="font-serif font-black text-white">Area Lainnya</h3>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <?php foreach ($locations as $l): ?>
-            <a href="<?= BASE_URL ?>/<?= e($l['slug']) ?>/"
-               class="area-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-semibold no-underline transition <?= $l['id'] == $location['id'] ? 'active' : 'text-white/55' ?>"
-               style="background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); <?= $l['id'] == $location['id'] ? 'background:rgba(245,197,24,.15); border-color:rgba(245,197,24,.4); color:#F5C518;' : '' ?>">
-              <span class="w-1 h-1 rounded-full <?= $l['id'] == $location['id'] ? 'bg-[#F5C518]' : 'bg-white/25' ?> flex-shrink-0 inline-block"></span>
-              <?= e($l['name']) ?>
-            </a>
-            <?php endforeach; ?>
-          </div>
-        </div>
+        <!-- 📍 Area Lainnya (Slider) -->
+<div class="rounded-2xl p-5" style="background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);">
+  <div class="flex items-center gap-2 mb-4">
+    <span class="text-[#F5C518]">📍</span>
+    <h3 class="font-serif font-black text-white">Area Lainnya</h3>
+  </div>
+
+  <?php
+  $per_page_area = 10;
+  $total_locs_area = count($locations);
+  $total_pages_area = ceil($total_locs_area / $per_page_area);
+  $active_idx_area = array_search($location['id'], array_column($locations, 'id'));
+  $active_page_area = $active_idx_area !== false ? (int)floor($active_idx_area / $per_page_area) : 0;
+  ?>
+
+  <!-- Halaman-halaman area -->
+ <?php for ($p = 0; $p < $total_pages_area; $p++): ?>
+<div id="darkAreaPage<?= $p ?>"
+     class="<?= $p === $active_page_area ? '' : 'hidden' ?>"
+     style="min-height:80px; display:<?= $p === $active_page_area ? 'grid' : 'none' ?>; grid-template-columns: repeat(2, 1fr); gap:8px;">
+  <?php
+  $slice = array_slice($locations, $p * $per_page_area, $per_page_area);
+  foreach ($slice as $l):
+    $is_active = $l['id'] == $location['id'];
+  ?>
+  <a href="<?= BASE_URL ?>/<?= e($l['slug']) ?>/"
+     class="area-pill inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[12px] font-semibold no-underline transition overflow-hidden"
+     style="background:<?= $is_active ? 'rgba(245,197,24,.15)' : 'rgba(255,255,255,.05)' ?>;
+            border:1px solid <?= $is_active ? 'rgba(245,197,24,.4)' : 'rgba(255,255,255,.08)' ?>;
+            color:<?= $is_active ? '#F5C518' : 'rgba(255,255,255,.55)' ?>;
+            min-width:0;">
+    <span class="inline-block flex-shrink-0 rounded-full"
+          style="width:4px;height:4px;background:<?= $is_active ? '#F5C518' : 'rgba(255,255,255,.25)' ?>;"></span>
+    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0;"><?= e($l['name']) ?></span>
+  </a>
+  <?php endforeach; ?>
+</div>
+<?php endfor; ?>
+  <!-- Navigasi -->
+  <?php if ($total_pages_area > 1): ?>
+  <div class="flex items-center justify-between mt-4 pt-3"
+       style="border-top:1px solid rgba(255,255,255,.06);">
+
+    <button onclick="darkAreaSlider(-1)" id="darkAreaPrev"
+            class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg transition"
+            style="background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:rgba(255,255,255,.4);">
+      ‹ Prev
+    </button>
+
+    <div class="flex items-center gap-1.5" id="darkAreaDots">
+      <?php for ($p = 0; $p < $total_pages_area; $p++): ?>
+      <span onclick="darkAreaGoPage(<?= $p ?>)"
+            class="dark-area-dot cursor-pointer rounded-full transition-all"
+            style="width:<?= $p === $active_page_area ? '20px' : '6px' ?>;height:6px;background:<?= $p === $active_page_area ? '#F5C518' : 'rgba(255,255,255,.15)' ?>;">
+      </span>
+      <?php endfor; ?>
+    </div>
+
+    <button onclick="darkAreaSlider(1)" id="darkAreaNext"
+            class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg transition"
+            style="background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:rgba(255,255,255,.4);">
+      Next ›
+    </button>
+
+  </div>
+  <p class="text-center text-[11px] mt-2" id="darkAreaPageInfo"
+     style="color:rgba(255,255,255,.2);"></p>
+  <?php endif; ?>
+
+</div>
 
         <!-- 💬 Siap Pesan? WA Card -->
         <div class="rounded-2xl p-6 text-center" style="background:linear-gradient(135deg,rgba(245,197,24,.12) 0%,rgba(245,197,24,.04) 100%); border:1px solid rgba(245,197,24,.2);">
@@ -511,4 +564,85 @@ function toggleSidebarAcc(btn) {
   document.querySelectorAll('.sidebar-acc-btn.open').forEach(el => el.classList.remove('open'));
   if (!isOpen) { btn.classList.add('open'); content.classList.add('open'); }
 }
+(function() {
+  const perPage  = <?= $per_page_area ?>;
+  const total    = <?= $total_locs_area ?>;
+  const pages    = <?= $total_pages_area ?>;
+  let cur        = <?= $active_page_area ?>;
+
+ function updateDarkArea() {
+  for (let i = 0; i < pages; i++) {
+    const el = document.getElementById('darkAreaPage' + i);
+    if (!el) continue;
+    if (i === cur) {
+      el.classList.remove('hidden');
+      el.style.display = 'grid';
+    } else {
+      el.classList.add('hidden');
+      el.style.display = 'none';
+    }
+  }
+
+    // Dots: pill shape untuk aktif, lingkaran kecil untuk yang lain
+    document.querySelectorAll('.dark-area-dot').forEach((dot, i) => {
+      if (i === cur) {
+        dot.style.width   = '20px';
+        dot.style.background = '#F5C518';
+      } else {
+        dot.style.width   = '6px';
+        dot.style.background = 'rgba(255,255,255,.15)';
+      }
+    });
+
+    // Tombol prev/next — ubah warna kalau aktif/disabled
+    const prev = document.getElementById('darkAreaPrev');
+    const next = document.getElementById('darkAreaNext');
+    if (prev) {
+      prev.disabled = cur === 0;
+      prev.style.opacity = cur === 0 ? '0.3' : '1';
+      prev.style.cursor  = cur === 0 ? 'not-allowed' : 'pointer';
+    }
+    if (next) {
+      next.disabled = cur === pages - 1;
+      next.style.opacity = cur === pages - 1 ? '0.3' : '1';
+      next.style.cursor  = cur === pages - 1 ? 'not-allowed' : 'pointer';
+    }
+
+    // Hover effect via JS agar inline style tidak konflik
+    [prev, next].forEach(btn => {
+      if (!btn) return;
+      btn.onmouseenter = () => {
+        if (!btn.disabled) {
+          btn.style.background     = 'rgba(245,197,24,.15)';
+          btn.style.borderColor    = 'rgba(245,197,24,.3)';
+          btn.style.color          = '#F5C518';
+        }
+      };
+      btn.onmouseleave = () => {
+        btn.style.background  = 'rgba(255,255,255,.05)';
+        btn.style.borderColor = 'rgba(255,255,255,.08)';
+        btn.style.color       = 'rgba(255,255,255,.4)';
+      };
+    });
+
+    // Info halaman
+    const info = document.getElementById('darkAreaPageInfo');
+    if (info) {
+      const start = cur * perPage + 1;
+      const end   = Math.min((cur + 1) * perPage, total);
+      info.textContent = start + '–' + end + ' dari ' + total + ' area';
+    }
+  }
+
+  window.darkAreaSlider  = function(dir) {
+    cur = Math.max(0, Math.min(pages - 1, cur + dir));
+    updateDarkArea();
+  };
+  window.darkAreaGoPage = function(p) {
+    cur = p;
+    updateDarkArea();
+  };
+
+  updateDarkArea();
+})();
 </script>
