@@ -132,19 +132,68 @@ $mob_products = db()->query("
       </div>
     </div>
 
-    <!-- Area Pengiriman -->
-    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:16px 18px;">
-      <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:14px;font-weight:700;color:#F5C518;margin-bottom:12px;">📍 Area Pengiriman</h3>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;">
-        <?php foreach ($locations as $l): ?>
-        <a href="<?= BASE_URL ?>/<?= e($l['slug']) ?>/"
-           style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:rgba(255,255,255,.45);text-decoration:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:4px 12px;border-radius:20px;">
-          <span style="width:3px;height:3px;border-radius:50%;background:rgba(245,197,24,.4);display:inline-block;flex-shrink:0;"></span>
-          <?= e($l['name']) ?>
-        </a>
-        <?php endforeach; ?>
-      </div>
+  <!-- Area Pengiriman -->
+<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:16px 18px;">
+  <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:14px;font-weight:700;color:#F5C518;margin-bottom:12px;">📍 Area Pengiriman</h3>
+
+  <?php
+  $mob_area_per_page = 10;
+  $mob_area_total    = count($locations);
+  $mob_area_pages    = (int)ceil($mob_area_total / $mob_area_per_page);
+  ?>
+
+  <?php for ($p = 0; $p < $mob_area_pages; $p++): ?>
+  <div id="mobAreaPage<?= $p ?>"
+       style="display:<?= $p === 0 ? 'grid' : 'none' ?>;
+              grid-template-columns:repeat(2,1fr);
+              gap:6px; min-height:60px;">
+    <?php
+    $slice = array_slice($locations, $p * $mob_area_per_page, $mob_area_per_page);
+    foreach ($slice as $l):
+    ?>
+    <a href="<?= BASE_URL ?>/<?= e($l['slug']) ?>/"
+       style="display:inline-flex;align-items:center;gap:5px;font-size:11px;
+              color:rgba(255,255,255,.45);text-decoration:none;
+              background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+              padding:4px 10px;border-radius:20px;overflow:hidden;min-width:0;">
+      <span style="width:3px;height:3px;border-radius:50%;background:rgba(245,197,24,.4);
+                   display:inline-block;flex-shrink:0;"></span>
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;">
+        <?= e($l['name']) ?>
+      </span>
+    </a>
+    <?php endforeach; ?>
+  </div>
+  <?php endfor; ?>
+
+  <?php if ($mob_area_pages > 1): ?>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);">
+    <button id="mobAreaPrev" onclick="mobAreaSlider(-1)"
+            style="font-size:11px;padding:4px 12px;border-radius:8px;
+                   border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);
+                   color:rgba(255,255,255,.4);cursor:pointer;">
+      ‹ Prev
+    </button>
+
+    <div style="display:flex;gap:4px;align-items:center;">
+      <?php for ($p = 0; $p < $mob_area_pages; $p++): ?>
+      <span id="mobAreaDot<?= $p ?>" onclick="mobAreaGoPage(<?= $p ?>)"
+            style="display:inline-block;height:5px;border-radius:3px;cursor:pointer;transition:all .2s;
+                   width:<?= $p === 0 ? '16px' : '5px' ?>;
+                   background:<?= $p === 0 ? '#F5C518' : 'rgba(255,255,255,.2)' ?>;"></span>
+      <?php endfor; ?>
     </div>
+
+    <button id="mobAreaNext" onclick="mobAreaSlider(1)"
+            style="font-size:11px;padding:4px 12px;border-radius:8px;
+                   border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);
+                   color:rgba(255,255,255,.4);cursor:pointer;">
+      Next ›
+    </button>
+  </div>
+  <p id="mobAreaInfo" style="text-align:center;font-size:11px;color:rgba(255,255,255,.2);margin-top:5px;"></p>
+  <?php endif; ?>
+</div>
 
   </div>
 </div>
@@ -197,6 +246,53 @@ $mob_products = db()->query("
   }
 
   window.slideCatMobGrogol = function(dir) { goTo(current + dir); };
+})();
+/* Area Pengiriman slider — mobile */
+(function(){
+  var perPage = <?= $mob_area_per_page ?>;
+  var total   = <?= $mob_area_total ?>;
+  var pages   = <?= $mob_area_pages ?>;
+  var cur     = 0;
+
+  function update() {
+    for (var i = 0; i < pages; i++) {
+      var el = document.getElementById('mobAreaPage' + i);
+      if (el) el.style.display = (i === cur) ? 'grid' : 'none';
+    }
+    for (var i = 0; i < pages; i++) {
+      var dot = document.getElementById('mobAreaDot' + i);
+      if (!dot) continue;
+      dot.style.width      = (i === cur) ? '16px' : '5px';
+      dot.style.background = (i === cur) ? '#F5C518' : 'rgba(255,255,255,.2)';
+    }
+    var prev = document.getElementById('mobAreaPrev');
+    var next = document.getElementById('mobAreaNext');
+    if (prev) {
+      prev.disabled      = (cur === 0);
+      prev.style.opacity = (cur === 0) ? '0.3' : '1';
+      prev.style.cursor  = (cur === 0) ? 'not-allowed' : 'pointer';
+      prev.onmouseenter  = function() { if (!prev.disabled) { prev.style.background='rgba(245,197,24,.15)'; prev.style.borderColor='rgba(245,197,24,.3)'; prev.style.color='#F5C518'; }};
+      prev.onmouseleave  = function() { prev.style.background='rgba(255,255,255,.06)'; prev.style.borderColor='rgba(255,255,255,.12)'; prev.style.color='rgba(255,255,255,.4)'; };
+    }
+    if (next) {
+      next.disabled      = (cur === pages - 1);
+      next.style.opacity = (cur === pages - 1) ? '0.3' : '1';
+      next.style.cursor  = (cur === pages - 1) ? 'not-allowed' : 'pointer';
+      next.onmouseenter  = function() { if (!next.disabled) { next.style.background='rgba(245,197,24,.15)'; next.style.borderColor='rgba(245,197,24,.3)'; next.style.color='#F5C518'; }};
+      next.onmouseleave  = function() { next.style.background='rgba(255,255,255,.06)'; next.style.borderColor='rgba(255,255,255,.12)'; next.style.color='rgba(255,255,255,.4)'; };
+    }
+    var info = document.getElementById('mobAreaInfo');
+    if (info) {
+      var start = cur * perPage + 1;
+      var end   = Math.min((cur + 1) * perPage, total);
+      info.textContent = start + '–' + end + ' dari ' + total + ' area';
+    }
+  }
+
+  window.mobAreaSlider  = function(dir) { cur = Math.max(0, Math.min(pages - 1, cur + dir)); update(); };
+  window.mobAreaGoPage  = function(p)   { cur = p; update(); };
+
+  update();
 })();
 </script>
 
