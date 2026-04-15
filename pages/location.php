@@ -81,13 +81,27 @@ require __DIR__ . '/../includes/header.php';
 @keyframes pin-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(245,197,24,.4)} 50%{box-shadow:0 0 0 8px rgba(245,197,24,0)} }
 .pin-dot { animation:pin-pulse 2s ease infinite; }
 
-/* Masonry */
-.layanan-masonry { columns:2; column-gap:16px; }
-@media(min-width:768px) { .layanan-masonry{columns:3} }
-@media(min-width:1024px) { .layanan-masonry{columns:4} }
-.layanan-masonry-item { break-inside:avoid; margin-bottom:16px; display:block; }
-.lm-card { position:relative; border-radius:20px; overflow:hidden; cursor:pointer; display:block; text-decoration:none; }
-.lm-card.h-sm{height:200px} .lm-card.h-md{height:260px} .lm-card.h-lg{height:320px} .lm-card.h-xl{height:380px}
+/* Grid Layanan — Konsisten */
+.layanan-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+@media(min-width:640px) {
+  .layanan-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.lm-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+  height: 340px;  /* tinggi konsisten semua card */
+}
+@media(min-width:768px) {
+  .lm-card { height: 380px; }
+}
 .lm-bg { position:absolute; inset:0; background-size:cover; background-position:center; transition:transform .7s cubic-bezier(.4,0,.2,1); }
 .lm-card:hover .lm-bg { transform:scale(1.08); }
 .lm-bg-fallback { position:absolute; inset:0; transition:transform .7s cubic-bezier(.4,0,.2,1); }
@@ -231,20 +245,18 @@ require __DIR__ . '/../includes/header.php';
       <p class="text-white/40 mt-3 max-w-lg mx-auto text-[15px]">Semua kebutuhan bunga Anda tersedia dan siap dikirim ke <?= e($location['name']) ?></p>
     </div>
 
-    <div class="layanan-masonry">
+    <div class="layanan-grid">
       <?php
-      $heights = ['h-md','h-xl','h-lg','h-sm','h-xl','h-md','h-sm','h-lg','h-md','h-xl','h-sm','h-md'];
-      $grads   = ['lm-grad-0','lm-grad-1','lm-grad-2','lm-grad-3'];
+      $grads = ['lm-grad-0','lm-grad-1','lm-grad-2','lm-grad-3'];
       foreach ($all_cats as $i => $cat):
         $has_img = !empty($cat['image']); $subs = $all_cats_subs[$cat['id']] ?? []; $has_sub = !empty($subs);
-        $height = $heights[$i % count($heights)]; $grad = $grads[$i % count($grads)];
+        $grad = $grads[$i % count($grads)];
         $num = str_pad($i + 1, 2, '0', STR_PAD_LEFT);
         $tag = $has_sub ? 'div' : 'a';
         $href = $has_sub ? '' : 'href="' . BASE_URL . '/' . e($cat['slug']) . '/"';
         $extra = $has_sub ? 'onclick="toggleLocSub(\'lc-' . $cat['id'] . '\', this)"' : '';
       ?>
-      <div class="layanan-masonry-item">
-        <<?= $tag ?> <?= $href ?> <?= $extra ?> class="lm-card <?= $height ?>">
+        <<?= $tag ?> <?= $href ?> <?= $extra ?> class="lm-card">
           <?php if ($has_img): ?>
           <div class="lm-bg" style="background-image:url('<?= e(imgUrl($cat['image'], 'category')) ?>');"></div>
           <?php else: ?>
@@ -262,7 +274,7 @@ require __DIR__ . '/../includes/header.php';
             <?php if ($has_sub): ?>
             <div class="lm-badge"><span class="w-1 h-1 rounded-full bg-[#F5C518]/50 inline-block"></span><?= count($subs) ?> layanan tersedia</div>
             <?php endif; ?>
-            <div class="lm-name <?= in_array($height, ['h-lg','h-xl']) ? 'text-xl' : 'text-base' ?>"><?= e($cat['name']) ?></div>
+            <div class="lm-name text-xl"><?= e($cat['name']) ?></div>
             <div class="lm-gold-line"></div>
             <div class="lm-detail">
               <?php if ($has_sub): ?>
@@ -279,7 +291,6 @@ require __DIR__ . '/../includes/header.php';
             </div>
           </div>
         </<?= $tag ?>>
-      </div>
       <?php endforeach; ?>
     </div>
   </div>

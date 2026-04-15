@@ -26,25 +26,7 @@ foreach ($sub_cats as $sc) {
     $subs_by_parent[$sc['parent_id']][] = $sc;
 }
 
-// Bento slot pattern (desktop): 0=tall-wide, 1=normal, 2=normal, 3=wide, 4=normal, 5=tall, dst
-// Kita definisikan class per posisi (loop mod 6)
-$bento_classes = [
-    0 => 'md:col-span-2 md:row-span-2',   // BESAR: 2x2
-    1 => 'md:col-span-1 md:row-span-1',   // normal
-    2 => 'md:col-span-1 md:row-span-1',   // normal
-    3 => 'md:col-span-1 md:row-span-1',   // normal
-    4 => 'md:col-span-2 md:row-span-1',   // lebar
-    5 => 'md:col-span-1 md:row-span-1',   // normal
-];
 
-$min_heights = [
-    0 => 'min-h-[320px] md:min-h-[340px]',
-    1 => 'min-h-[160px] md:min-h-[160px]',
-    2 => 'min-h-[160px] md:min-h-[160px]',
-    3 => 'min-h-[160px] md:min-h-[160px]',
-    4 => 'min-h-[160px] md:min-h-[160px]',
-    5 => 'min-h-[160px] md:min-h-[160px]',
-];
 ?>
 
 <style>
@@ -111,8 +93,7 @@ section#layanan {
     </div>
 
     <!-- ── BENTO GRID ── -->
-    <div class="bento-grid grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5 auto-rows-auto">
-
+    <div class="bento-grid grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
       <?php foreach ($parent_cats as $i => $cat):
         $slot      = $i % 6;
         $has_img   = !empty($cat['image']);
@@ -133,7 +114,7 @@ section#layanan {
       ?>
 
       <!-- Kartu <?= $i ?> — slot <?= $slot ?> -->
-      <div class="layanan-card group relative rounded-2xl overflow-visible <?= $bento_classes[$slot] ?> <?= $min_heights[$slot] ?> transition-all duration-300 cursor-pointer"
+      <div class="layanan-card group relative rounded-2xl overflow-visible min-h-[260px] md:min-h-[300px] transition-all duration-300 cursor-pointer"
            style="<?= $has_img ? '' : "background: $bg;" ?> border: 1px solid rgba(255,255,255,.08);"
            <?= $has_subs ? 'onclick="toggleLayananSub(this)"' : '' ?>>
 
@@ -167,17 +148,16 @@ section#layanan {
           <?php endif; ?>
 
           <!-- Nama layanan -->
-          <h3 class="font-serif font-bold text-base md:<?= $slot === 0 ? 'text-2xl' : 'text-lg' ?> leading-tight mb-2
-                     <?= $has_img ? 'text-white' : 'text-white/90' ?>">
+<h3 class="font-serif font-bold text-base md:text-lg leading-tight mb-2
+           <?= $has_img ? 'text-white' : 'text-white/90' ?>">
             <?= e($cat['name']) ?>
           </h3>
 
-          <!-- Deskripsi singkat (hanya kartu besar / slot 0) -->
-          <?php if ($slot === 0 && !empty($cat['description'])): ?>
-          <p class="text-white/60 text-[13px] leading-relaxed mb-3 max-w-xs line-clamp-2">
-            <?= e($cat['description']) ?>
-          </p>
-          <?php endif; ?>
+       <?php if (!empty($cat['description'])): ?>
+<p class="text-white/60 text-[13px] leading-relaxed mb-3 line-clamp-2">
+  <?= e($cat['description']) ?>
+</p>
+<?php endif; ?>
 
           <!-- CTA -->
           <?php if ($has_subs): ?>
