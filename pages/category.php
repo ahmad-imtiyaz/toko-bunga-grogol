@@ -78,6 +78,119 @@ require __DIR__ . '/../includes/header.php';
   box-shadow: 0 0 0 1.5px rgba(245,197,24,.5), 0 24px 64px rgba(0,0,0,.5);
 }
 
+/* ── Prose content dari database (h1-h6, p, ul, li, dll) ── */
+.cat-prose h1,
+.cat-prose h2,
+.cat-prose h3,
+.cat-prose h4 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.3;
+  margin-top: 28px;
+  margin-bottom: 10px;
+}
+.cat-prose h1 { font-size: 28px; }
+.cat-prose h2 { font-size: 23px; }
+.cat-prose h3 { font-size: 19px; }
+.cat-prose h4 { font-size: 16px; }
+
+.cat-prose p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: rgba(255,255,255,.55);
+  margin-bottom: 16px;
+}
+
+.cat-prose ul,
+.cat-prose ol {
+  margin: 0 0 18px 0;
+  padding: 0;
+}
+.cat-prose ol {
+  list-style: decimal;
+  padding-left: 20px;
+}
+.cat-prose ol li {
+  font-size: 14px;
+  color: rgba(255,255,255,.55);
+  line-height: 1.85;
+  margin-bottom: 6px;
+  padding-left: 4px;
+}
+
+/* ul sudah ada ::before di CSS lama, ini tambahannya */
+.cat-prose ul li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 14px;
+  color: rgba(255,255,255,.55);
+  line-height: 1.85;
+  margin-bottom: 6px;
+}
+.cat-prose ul li::before {
+  content: '✦';
+  color: #F5C518;
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.cat-prose strong,
+.cat-prose b {
+  color: rgba(255,255,255,.85);
+  font-weight: 700;
+}
+
+.cat-prose em,
+.cat-prose i {
+  font-style: italic;
+  color: rgba(255,255,255,.4);
+}
+
+.cat-prose a {
+  color: #F5C518;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity .2s;
+}
+.cat-prose a:hover { opacity: .75; }
+
+.cat-prose blockquote {
+  border-left: 3px solid #F5C518;
+  margin: 20px 0;
+  padding: 12px 18px;
+  background: rgba(245,197,24,.07);
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: rgba(255,255,255,.45);
+}
+
+.cat-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 13.5px;
+}
+.cat-prose table th {
+  background: rgba(245,197,24,.15);
+  color: #F5C518;
+  padding: 9px 13px;
+  text-align: left;
+  font-weight: 700;
+  letter-spacing: .04em;
+  border-bottom: 1px solid rgba(245,197,24,.2);
+}
+.cat-prose table td {
+  padding: 8px 13px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  color: rgba(255,255,255,.5);
+}
+.cat-prose table tr:hover td {
+  background: rgba(255,255,255,.03);
+}
+
 /* ── Filter tabs ── */
 .cat-tab {
   transition: all .25s ease;
@@ -393,9 +506,9 @@ require __DIR__ . '/../includes/header.php';
         </h2>
 
         <?php if (!empty($category['content'])): ?>
-        <div class="text-white/55 leading-relaxed text-[15px] mb-6">
-          <?= $category['content'] ?>
-        </div>
+        <div class="cat-prose mb-6">
+  <?= $category['content'] ?>
+</div>
         <?php endif; ?>
 
         <p class="text-white/50 text-[15px] leading-relaxed mb-8">
