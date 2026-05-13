@@ -169,9 +169,19 @@ require __DIR__ . '/../includes/header.php';
           <span class="pin-dot w-2 h-2 rounded-full bg-[#F5C518] inline-block flex-shrink-0"></span>
           📍 <?= e($location['name']) ?>, Grogol
         </div>
-        <h1 class="reveal reveal-2 font-serif text-4xl md:text-5xl lg:text-[56px] font-black text-white leading-tight mb-5">
-          Toko Bunga<br><span style="color:#F5C518;"><?= e($location['name']) ?></span>
-        </h1>
+       <h1 class="reveal reveal-2 font-serif text-4xl md:text-5xl lg:text-[56px] font-black text-white leading-tight mb-5">
+    <?php
+        $words = explode(' ', e($location['name']));
+        $total = count($words);
+        $half  = (int) ceil($total / 2); // kata pertama (setengah) = putih
+    ?>
+    <span style="color:#FFFFFF;">
+        <?= implode(' ', array_slice($words, 0, $half)) ?>
+    </span>
+    <span style="color:#F5C518;">
+        <?= implode(' ', array_slice($words, $half)) ?>
+    </span>
+</h1>
         <p class="reveal reveal-3 text-white/50 text-base md:text-lg leading-relaxed mb-8 max-w-md">
           <?= !empty($location['meta_description']) ? e($location['meta_description']) : 'Florist ' . e($location['name']) . ' terpercaya — karangan bunga papan, hand bouquet, wedding, duka cita. Pengiriman cepat 2–4 jam ke seluruh ' . e($location['name']) . '.' ?>
         </p>
@@ -375,7 +385,7 @@ require __DIR__ . '/../includes/header.php';
             <span class="w-1.5 h-1.5 rounded-full bg-[#F5C518] inline-block"></span>Tentang Kami
           </div>
           <h2 class="font-serif text-2xl md:text-3xl font-black text-white mb-5 leading-tight">
-            Toko Bunga <?= e($location['name']) ?><br><span style="color:#F5C518;">Terpercaya & Berpengalaman</span>
+            <?= e($location['name']) ?><br><span style="color:#F5C518;">Terpercaya & Berpengalaman</span>
           </h2>
           <?php if (!empty($location['content'])): ?>
           <div class="text-white/50 leading-relaxed text-[15px] mb-5 loc-content"><?= $location['content'] ?></div>
